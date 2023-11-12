@@ -5,7 +5,7 @@ from discord.ext import tasks
 from urllib.parse import urljoin
 
 
-TOKEN = 'YOUR_DISCORD_TOKEN'
+TOKEN = 'MTE3MzA3Mjc1MDUxNzE3ODUwOA.GBwKLU.DtuR2We_TQsoErc3bt9ZoeJ7DIuL54gSmS3AnM'
 CHANNEL_ID = 1132481238960181300  
 URL = 'https://www.sixfootscience.com/brain-snips'
 testing = True
@@ -19,11 +19,10 @@ async def check_blog():
 
     #beautiful soup literally does everything
     soup = BeautifulSoup(response.content, 'html.parser')
-
-    # titles + links
     posts = soup.find_all('a', href=True)
 
-    for post in posts[:5] if testing else posts:
+    
+    for post in posts[:5]:
         title = post.get_text(strip=True)
         relative_link = f"{URL}{post['href']}"  #relative links suck
         link = urljoin(URL, relative_link)
