@@ -3,9 +3,12 @@ from bs4 import BeautifulSoup
 import discord
 from discord.ext import tasks
 from urllib.parse import urljoin
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 
-TOKEN = 'MTE3MzA3Mjc1MDUxNzE3ODUwOA.GBwKLU.DtuR2We_TQsoErc3bt9ZoeJ7DIuL54gSmS3AnM'
+TOKEN = os.getenv("BOT_TOKEN")
 CHANNEL_ID = 1132481238960181300  
 URL = 'https://www.sixfootscience.com/brain-snips'
 testing = True
@@ -19,15 +22,13 @@ async def check_blog():
 
     #beautiful soup literally does everything
     soup = BeautifulSoup(response.content, 'html.parser')
-    posts = soup.find_all('a', href=True)
-
-    
-    for post in posts[:5]:
-        title = post.get_text(strip=True)
-        relative_link = f"{URL}{post['href']}"  #relative links suck
+    post = soup.find('a', href=True)
+    title = post.get_text(strip=True)
+    if(check_blog.title != title):
+        check_blog.title = title 
+        relative_link = f"{URL}{post['href']}" 
         link = urljoin(URL, relative_link)
         channel = client.get_channel(CHANNEL_ID)
-        
         await channel.send(f"New article!!! {title}\nLink: {link}")
 
 @client.event
